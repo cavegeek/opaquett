@@ -1,0 +1,75 @@
+alias snat
+  *'
+  ----
+  ^(a:*'')
+  ^(f:^(x:a)a)
+  ^(x:a)
+  a
+
+alias szero
+  snat
+  ----
+  \(a:*'')
+  \(f:^(x:a)a)
+  \(x:a)
+  x
+
+alias ssucc
+  ^(n:snat)snat
+  ----
+  \(n:snat)
+  \(a:*'')
+  \(f:^(x:a)a)
+  \(x:a)
+  f (n a f x)
+
+alias 0
+  *'
+  ----
+  ^(a:*')a
+
+alias 1
+  *'
+  ----
+  [todo]
+
+alias 2
+  *'
+  ----
+  
+
+alias or
+  ^(a:*')
+  ^(b:*')
+  *'
+  ----
+  [todo]
+
+alias inl
+  ^(a:*')
+  ^(b:*')
+  ^(x:a)
+  or a b
+  ----
+  \(a:*')
+  \(b:*')
+  \(x:a)
+    \(
+
+alias case
+  ^(a:*')
+  ^(b:*')
+  ^(o:or a b)
+
+
+alias induct
+  ^(f:^(a:*')*')
+  *'
+  ----
+  \(f:^(a:*')*')
+  %(n:snat,n *' f 0)
+
+alias nat
+  *'
+  ----
+  induct (\(n:*') or 1 n)

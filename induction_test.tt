@@ -1,0 +1,122 @@
+id
+  ^(a:*)
+  ^(x:a)
+  a
+  ----
+  \(a:*)
+  \(x:a)
+  x
+
+eq
+  ^(a:*)
+  ^(x:a)
+  ^(y:a)
+  *
+  ----
+  \(a:*)
+  \(x:a)
+  \(y:a)
+    ^(m:^(z:a)*)
+    ^(t:m x)
+    m y
+
+refl
+  ^(a:*)
+  ^(x:a)
+  eq a x x
+  ----
+  \(a:*)
+  \(x:a)
+  (!eq (eqdef - ^(e:eqdef a x x) eq a x x) (id (eq a x x)))
+    \(m:^(y:a)*)
+    \(t:m x)
+    t
+
+leibniz
+  ^(a:*)
+  ^(x:a)
+  ^(y:a)
+  ^(e:eq a x y)
+  ^(m:^(z:a)*)
+  ^(t:m x)
+  m y
+  ----
+  \(a:*)
+  \(x:a)
+  \(y:a)
+  \(e:eq a x y)
+  \(m:^(z:a)*)
+  \(t:m x)
+  (!eq (eqdef - eqdef a x y) e) m t
+
+eqapply
+  ^(a:*)
+  ^(x:a)
+  ^(y:a)
+  ^(b:*)
+  ^(f:^(x:a)b)
+  ^(e:eq a x y)
+  eq b (f x) (f y)
+  ----
+  \(a:*)
+  \(x:a)
+  \(y:a)
+  \(b:*)
+  \(f:^(x:a)b)
+  \(e:eq a x y)
+  leibniz
+    a
+    x
+    y
+    e
+    (\(z:a) eq b (f x) (f z))
+    (refl b (f x))
+
+add
+  ^(x:#)
+  ^(y:#)
+  #
+  ----
+  \(x:#)
+  \(y:#)
+    \#(x)
+      t- #
+      --
+      y
+      --
+      k,r- `r
+
+add_zero_left
+  ^(x:#)
+  eq # (add @ x) x
+  ----
+  \(x:#)
+  (!add (adddef - ^(e:eq # (adddef @ x) x) eq # (add @ x) x) (id (eq # (add @ x) x))) (refl # x)
+
+add_succ_comm_left
+  ^(x:#)
+  ^(y:#)
+  eq # (`add x y) (add (`x) y)
+  ----
+  \(x:#)
+  \(y:#)
+    (!add (adddef - ^(e:eq # (`adddef x y) (adddef (`x) y)) eq # (`add x y) (add (`x) y)) id (eq # (`add x y) (add (`x) y)))
+      (refl # `(\#(x)t-#--y--k,r-(`r)))
+
+add_zero_right
+  ^(x:#)
+  eq # (add x @) x
+  ----
+  \(x:#)
+    \#(x)
+      t- eq # (add t @) t
+      --
+      add_zero_left @
+      --
+      k,p- leibniz
+             #
+             (`add k @)
+             (add (`k) @)
+             (add_succ_comm_left k @)
+             (\(x:#) eq # x (`k))
+             (eqapply # (add k @) k # (\(x:#) `x) p)

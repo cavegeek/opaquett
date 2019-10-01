@@ -1,0 +1,10 @@
+container
+  ^(f:^(a:*)*)
+  *
+  ----
+  \(f:^(a:*)*)
+  ^(motive:*)
+  ^(step:^(x:f motive) motive)
+  motive
+
+

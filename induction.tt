@@ -1,0 +1,36 @@
+alias nat
+  *''
+  ----
+  ^(a:*')
+  ^(f:^(x:a)a)
+  ^(x:a)a
+
+prove zero
+  nat
+  ----
+  \(a:*')
+  \(f:^(x:a)a)
+  \(x:a) x
+
+prove succ
+  ^(n:nat) nat
+  ----
+  \(n:nat)
+  \(a:*')
+  \(f:^(x:a)a)
+  \(x:a)
+    f (n [eh fix the odd suggestion] f x)
+
+alias ind
+  ^(a:*')
+  ^(m:^(n:nat)*')
+  ^(base:m zero)
+  ^(step:^(n:nat)^(k:m n) m (succ n))
+  ^(n:nat) m n
+  ----
+  \(a:*')
+  \(m:^(n:nat)*')
+  \(base:m zero)
+  \(step:^(n:nat)^(k:m n) m (succ n))
+  \(n:nat)
+    

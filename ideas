@@ -1,0 +1,42 @@
+syntax:
+        infix operators a + b === + a b
+                allows us to implement do notation, especially when combined with declarable bindings
+                unusual fixity declarations to allow fixities of expressions, like this
+                        infixl ^(a:*) (eq a) above & | 
+        declarable bindings foo[x:a] b === foo a \(x:a) b
+                useful, even though exists must be a builtin
+        let expressions let x : t = v body === (\(x:t) b) v
+        comments!
+        principia mathematica . parentheses
+                really readable!  a bit obscure
+                possible alternative is some way to denote the height of an infix operator, then we don't need fixity declarations
+                        ie: 1+2 * 3 (but that overloads space, maybe overload underscore) 1_+_2__*__3 (ugh, ugly!)
+                better yet, . begins something infix, . on its own is function application, space is necessary between things
+                        colon is two dots (what about colon for types)
+                        1 .+ 2 .:* 3 === (1+2) * 3
+                        f . x .+ 2 === (f x) + 2
+                        f : x .+ 2 === f (x + 2)
+                        f :: x .+ 2 .:* 3 === f ((x+2) * 3)
+
+        Dijkstra style infix function application .
+                conflicts a bit with . parentheses but also really readable and parsable
+semantics:
+        typeof function
+                allows us to implement type inference
+        product and sum destructors binder (^(x:a) b) === a, result (^(x:a) b) === \(x:a) b
+                allows us to implement type inference
+        omega universe
+                allows us to do universe inference, and write universe-insensitive definitions, like for equality
+        all definitions opaque, but giving an additional rule definition{name} : ^(m:^(t:typeof{name})*)^(m name) m defnof{name}
+                gives us nice readable proofs, and allows us to get rid of the stupid alias/prove distinction
+                possibly we also need a calculate{name} : typeof{name} which expands as a transparent definition would
+                not needed for completeness, but for convenience a definition{name} : ^(m:^(t:typeof{name})*)^(m defnof{name}) m name
+                also not needed for completeness defnof{name} : typeof{name} = defnof{name}
+libraries:
+        universe for functional (and maybe (total) imperative) algorithms
+                saves us from defining the running-time of proofs, which is odd and doesn't make sense
+                possibly allows us to lazy-ify and de-lazy-ify as a function, automatically getting the differing run-times, maybe
+                could lead to a formal theory of lazy functional running time
+                can provide intuition for run times by giving a compiler to a formal idealized machine code
+notes:
+        Logical Frameworks by Huet and Plotkin says inductive families give functions to pairs of elements and indices
